@@ -1,0 +1,57 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+{% block title %}
+Новость
+{% endblock title %}
+
+{% block content %}
+{% if category %}
+        {% load account %}
+
+        <h5>
+        {% for cat in category %}
+            <div>
+                {{ cat.category__category }}
+                {% if user.is_authenticated %}
+                    {% if cat.category not in subscribed %}
+                        | <button><a href="{% url 'subscribe_category' cat.category %}">Подписаться</a></button>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endfor %}
+        </h5>
+    {% endif %}
+<table>
+    <thead>
+        <th>
+           Тема
+        </th>
+        <th>
+            Дата публикации
+        </th>
+        <th>
+            Текст статьи
+        </th>
+        <th>
+            Автор статьи
+        </th>
+    </thead>
+    <tr>
+        <td>
+            <h1>{{ news.header|censor }}</h1>
+        </td>
+        <td>
+            <h6>{{ news.pub_date|date:'d.m.Y G:i' }}</h6>
+        </td>
+        <td>
+            <p>{{ news.text|censor }}</p>
+            <hr>
+        </td>
+        <td>
+            <p>{{ news.author }}</p>
+            <hr>
+        </td>
+    </tr>
+</table>
+
+{% endblock content %}
